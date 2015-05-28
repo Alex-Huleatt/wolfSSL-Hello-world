@@ -1,6 +1,9 @@
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<link href="site/prettify.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="site/prettify.js"></script>
+<body onload="prettyPrint()">
 
-<h1 id="wolfssl-quickstart-guide">wolfSSL QuickStart Guide</h1>
+<body bgcolor="#eaeeef">
+<center><h1 id="wolfssl-quickstart-guide">wolfSSL QuickStart Guide</h1></center>
 <ol>
 <li><a href="#intro">Introduction</a></li>
 <li><a href="#needed">Needed</a></li>
@@ -157,7 +160,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<p>The server waits on the port until it hears a request, and then prints a single message before exiting. To make this file, it is importand that the necessary libraries get pushed to the compiler, this code can easily be obtained with the appropriate Makefile <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-">On GitHub</a>. Please be aware, that in a real implementation, there are numerous potential errors that need to be handled. Most of these functions return error codes or nulls if something goes wrong. This code will fail if anything happens. </p>
+<p>The server waits on the port until it hears a request, and then prints a single message before exiting. To make this file, it is importand that the necessary libraries get pushed to the compiler, this code can easily be obtained with the appropriate Makefile <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-">On GitHub</a>. Please be aware, that in a real implementation, there are numerous potential errors that need to be handled. Most of these functions return error codes or nulls if something goes wrong. This code will fail if anything unsavory happens. </p>
 
 
 <a name="api"></a>
