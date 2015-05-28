@@ -43,24 +43,30 @@
 <li>Basic knowledge of server/client communication</li>
 <li>Basic knowledge of SSL/TLS</li>
 </ul>
-<p>The more you know, the easier it will be to set everything. There are a number of links in the Helpful Links section to read up on SSL/TLS</p>
+<p>The more you know, the easier it will be to get going. There are a number of links in the Helpful Links section to read up on SSL/TLS</p>
 
 <a name="install"></a>
 <h2 id="installation-and-setup-wzxhzdk4wzxhzdk5">Installation and Setup </h2>
 <p>The wolfSSL library requires the use of autoconf and a C compiler in order to operate. wolfSSL supports a majority of operating systems, a full list of which can be seen on the <a href="http://www.wikipedia.org/wiki/WolfSSL">wolfSSL wikipedia article.</a></p>
 <h3 id="getting-the-code">Getting the Code</h3>
-<p>There are two locations from which to obtain the source code. The
+<p>Download the source from one of the following locations:
 <a href="http://www.wolfssl.com/yaSSL/download/downloadForm.php">wolfSSL webpage</a> or
 <a href="http://www.github.com/wolfSSL/wolfssl">GitHub</a>.</p>
 <p><strong>Note</strong>: it is necessary to run <code>bash autogen.sh</code> if the source is downloaded from the GitHub repo.<br />
 </p>
-<p>Setup
-After the source code has been obtained, running <code>./configure</code> in a terminal will use autoconf to configure wolfSSL to default settings; a full list of possible options can be found in the manual. Subsequently, calling <code>make</code> will compile. To use this code from anywhere, <code>sudo make install</code> will allow one to include this package with <code>#include &lt;wolfssl/ssl.h&gt;</code>.</p>
+<h3 id="setup">Setup</h3>
+<p>After you have downloaded the source code run the following commands from the wolfssl/ directory:
+<pre>
+./configure   
+make 
+sudo make install
+</pre>
+<code>./configure</code>  uses autoconf to configure wolfSSL to default settings; a full list of possible options can be found in the manual.  <code>make</code> will compile the wolfSSL library. <code>sudo make install</code> will allow one to use wolfSSL from anywhere by including the package with <code class="prettify"> #include &ltwolfssl/ssl.h&gt </code>.
 <p>That's it!</p>
 
 <a name="examp"></a>
 <h2 id="hello-world-serverclient-example">Hello, World! Server/Client Example</h2>
-<p>Now that wolfSSL has been compiled and installed we can include it and use any of its functions. Here we will try to demonstrate a simple client/server interaction using wolfSSL to secure a message. </p>
+<p>Now that wolfSSL has been compiled and installed we can include it and use any of its functions. Here we demonstrate a simple client/server interaction using wolfSSL to secure a message. </p>
 <h3 id="clientc">client.c</h3>
 <pre><code class="prettyprint">#include &ltwolfssl/ssl.h&gt
 #include &ltsys/socket.h&gt
@@ -160,7 +166,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<p>The server waits on the port until it hears a request, and then prints a single message before exiting. To make this file, it is importand that the necessary libraries get pushed to the compiler, this code can easily be obtained with the appropriate Makefile <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-">On GitHub</a>. Please be aware, that in a real implementation, there are numerous potential errors that need to be handled. Most of these functions return error codes or nulls if something goes wrong. This code will fail if anything unsavory happens. </p>
+<p>The server waits on the port until it hears a request, and then prints a single message before exiting. To compile this file, it is important to link the wolfSSL library with the <code>-lwolfssl</code> option, this is automatically handled by the makefile which can be obtained with the code <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-">on GitHub</a>. Please be aware, that in a real implementation, there are numerous potential errors that need to be handled. Most of these functions return error codes or nulls if something goes wrong. This code will fail if anything unsavory happens. </p>
 
 
 <a name="api"></a>
