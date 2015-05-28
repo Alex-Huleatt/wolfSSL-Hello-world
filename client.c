@@ -26,7 +26,7 @@ int main()
     ctx = wolfSSL_CTX_new(method); /* make new ssl context */
     ssl = wolfSSL_new(ctx);
 
-    wolfSSL_CTX_load_verify_locations(ctx, cert, 0); /* Add certs to ctx */
+    wolfSSL_CTX_load_verify_locations(ctx, cert, 0); /* Add cert to ctx */
 
     wolfSSL_set_fd(ssl, sockfd); /* Connect wolfssl to the socket */
     wolfSSL_connect(ssl); /* connect to server */

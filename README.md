@@ -1,9 +1,7 @@
 # WolfSSL-Hello-world-
 
-make
+>`make`
+`./server`
+`./client` (in a different window)
 
-./server
-
-./client (in a different window)
-
-profit
+Say hello!
