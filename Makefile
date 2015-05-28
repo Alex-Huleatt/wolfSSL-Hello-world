@@ -13,4 +13,4 @@ client: client.o
 .PHONY: clean all
 
 clean:
-	rm -f *.o server
+	rm -f *.o server client
