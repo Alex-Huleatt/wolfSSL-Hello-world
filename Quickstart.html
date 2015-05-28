@@ -176,6 +176,10 @@ int main() {
 <blockquote>
 <p>Initializes the wolfSSL library for use.  Must be called once per application and before any other call to the library.</p>
 </blockquote>
+<p><code>WOLFSSL_CTX* wolfSSL_CTX_new(WOLFSSL_METHOD* method)</code></p>
+<blockquote>
+<p>This function creates a new SSL context, taking a desired SSL/TLS protocol method for input.</p>
+</blockquote>
 <p><code>WOLFSSL* wolfSSL_new(WOLFSSL_CTX* ctx)</code></p>
 <blockquote>
 <p>This function creates a new SSL session, taking an already created SSL context as input.</p>
@@ -183,10 +187,6 @@ int main() {
 <p><code>int wolfSSL_set_fd(WOLFSSL* ssl, int fd)</code></p>
 <blockquote>
 <p>This function assigns a file descriptor (fd) as the input/output facility for the SSL connection.  Typically this will be a socket file descriptor.</p>
-</blockquote>
-<p><code>WOLFSSL_CTX* wolfSSL_CTX_new(WOLFSSL_METHOD* method)</code></p>
-<blockquote>
-<p>This function creates a new SSL context, taking a desired SSL/TLS protocol method for input.</p>
 </blockquote>
 <p><code>WOLFSSL_METHOD* wolfTLSv1_2_client_method()</code></p>
 <blockquote>
@@ -231,7 +231,7 @@ int main() {
 </blockquote>
  <a name="links">
 <h2 id="helpful-links-wzxhzdk8wzxhzdk9">Helpful Links</a></h2>
-<p>In general, these are links which will be useful for using both wolfSSL, as well as just networked and secure applications in general.</p>
+<p>In general, these are links which will be useful for using both wolfSSL, as well as just networked and secure applications in general. Furthermore, there is a more comprehensive tutorial that can be found in chapter 11 of the offical wolfSSL manual, these examples also do appropriate error checking, which is worth taking a look at. For a more comprehensive API, check out chapter 17 of the offical manual.</p>
 <ul>
 <li><a href="http://www.wolfssl.com/documentation/CyaSSL-Manual.pdf">wolfSSL official manual</a></li>
 <li><a href="http://www.wikipedia.org/wiki/WolfSSL">wolfSSL Wikipedia page</a></li>
