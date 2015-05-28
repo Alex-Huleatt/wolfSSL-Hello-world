@@ -6,7 +6,7 @@
 <center><h1 id="wolfssl-quickstart-guide">wolfSSL QuickStart Guide</h1></center>
 <ol>
 <li><a href="#intro">Introduction</a></li>
-<li><a href="#needed">Needed</a></li>
+<li><a href="#needed">Before You Get Started</a></li>
 <li><a href="#install">Compilation &amp; Installation</a></li>
 <li><a href="#examp">Hello, World example</a></li>
 <li><a href="#api">Mini API</a></li>
@@ -15,10 +15,10 @@
 <a name="intro"></a>
 <h2 id="introduction-to-wolfssl-wzxhzdk0wzxhzdk1">Introduction to wolfSSL </h2>
 <p>The wolfSSL embedded SSL library (formerly CyaSSL) is a lightweight SSL/TLS library written in ANSI C and targeted for embedded, RTOS, and resource-constrained environments - primarily because of its small size, speed, and feature set.  It is commonly used in standard operating environments as well because of its royalty-free pricing and excellent cross platform support.  wolfSSL supports industry standards up to the current TLS 1.2 and DTLS 1.2 levels, is up to 20 times smaller than OpenSSL, and offers progressive ciphers such as HC-128, RABBIT, NTRU, and SHA-3.  User benchmarking and feedback reports dramatically better performance when using wolfSSL over OpenSSL. </p>
-<p>The wolfSSL library is designed to facilitate secure communication, as well as offering a suite of cryptographic algorithms and a command line tool. In this quickstart guide, we will cover basic installation and setup, as well as simple use cases. For a more comprehensive tour, see the manual linked to in “Helpful Links” section towards the bottom. A number of other useful links are also available for those new to the wonderful world of secure communication. </p>
+<p>The wolfSSL library is designed to facilitate secure communication, as well as offering a suite of cryptographic algorithms and a command line tool. In this quickstart guide, we will cover basic installation and setup, as well as simple use cases. For a more comprehensive tour, see the manual linked to in the <a href="#links">Helpful Links </a> section towards the bottom. A number of other useful links are also available for those new to the wonderful world of secure communication. </p>
 <a name="needed"></a>
-<h2 id="what-is-needed-wzxhzdk2wzxhzdk3">What is Needed </h2>
-<h3 id="requirements">Requirements</h3>
+<h2 id="what-is-needed-wzxhzdk2wzxhzdk3">Before You Get Started</h2>
+<h3 id="requirements">Required</h3>
 <ul>
 <li>make<ul>
 <li>required to compile the wolfSSL source</li>
@@ -60,7 +60,7 @@ After the source code has been obtained, running <code>./configure</code> in a t
 
 <a name="examp"></a>
 <h2 id="hello-world-serverclient-example">Hello, World! Server/Client Example</h2>
-<p>Now that wolfSSL has been compiled and installed we can include it and use any of its functions. Here we will try demostrate a simple client/server interaction using wolfSSL to secure a message. </p>
+<p>Now that wolfSSL has been compiled and installed we can include it and use any of its functions. Here we will try to demonstrate a simple client/server interaction using wolfSSL to secure a message. </p>
 <h3 id="clientc">client.c</h3>
 <pre><code class="prettyprint">#include &ltwolfssl/ssl.h&gt
 #include &ltsys/socket.h&gt
