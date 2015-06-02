@@ -45,7 +45,7 @@ int main() {
     /* Attach the server socket to our port */
     bind(sockfd, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
 
-    AcceptAndRead(ctx, sockfd, clientAddr);
+    if (listen(sockfd,1)==0) AcceptAndRead(ctx, sockfd, clientAddr);
 
     wolfSSL_CTX_free(ctx);   /* Free WOLFSSL_CTX */
     wolfSSL_Cleanup();       /* Free wolfSSL */
