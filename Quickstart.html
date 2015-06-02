@@ -169,75 +169,165 @@ int main() {
 
 <a name="api"></a>
 <h2 id="mini-api-wzxhzdk6wzxhzdk7">Mini API</h2>
-<p>Below is a small subset of the wolfSSL API. These functions are the ones assumed to be the most valuable to a new user. More information is obtainable in the official manual. </p>
-<p><code>int wolfSSL_Init(void)</code></p>
+<p>
+    Below is a small subset of the wolfSSL API. These functions are the ones assumed to be the most valuable to a new user. More information is obtainable in the official manual.
+</p>
+<p>
+    <code>int wolfSSL_Init(void)</code>
+</p>
 <blockquote>
-<p>Initializes the wolfSSL library for use.  Must be called once per application and before any other call to the library.</p>
+<p>
+    Initializes the wolfSSL library for use.  Must be called once per application and before any other call to the library.
+</p>
 </blockquote>
-<p><code>WOLFSSL_CTX* wolfSSL_CTX_new(WOLFSSL_METHOD* method)</code></p>
+<p>
+    <code>WOLFSSL_CTX* wolfSSL_CTX_new(WOLFSSL_METHOD* method)</code>
+</p>
 <blockquote>
-<p>This function creates a new SSL context, taking a desired SSL/TLS protocol method for input.</p>
+<p>
+    This function creates a new SSL context, taking a desired SSL/TLS protocol method for input.
+</p>
 </blockquote>
-<p><code>WOLFSSL* wolfSSL_new(WOLFSSL_CTX* ctx)</code></p>
+<p>
+    <code>WOLFSSL* wolfSSL_new(WOLFSSL_CTX* ctx)</code>
+</p>
 <blockquote>
-<p>This function creates a new SSL session, taking an already created SSL context as input.</p>
+<p>
+    This function creates a new SSL session, taking an already created SSL context as input.
+</p>
 </blockquote>
-<p><code>int wolfSSL_set_fd(WOLFSSL* ssl, int fd)</code></p>
+<p>
+    <code>int wolfSSL_set_fd(WOLFSSL* ssl, int fd)</code>
+</p>
 <blockquote>
-<p>This function assigns a file descriptor (fd) as the input/output facility for the SSL connection.  Typically this will be a socket file descriptor.</p>
+<p>
+    This function assigns a file descriptor (fd) as the input/output facility for the SSL connection.  Typically this will be a socket file descriptor.
+</p>
 </blockquote>
-<p><code>WOLFSSL_METHOD* wolfTLSv1_2_client_method()</code></p>
+<p>
+    <code>WOLFSSL_METHOD* wolfTLSv1_2_client_method()</code>
+</p>
 <blockquote>
-<p>The wolfTLSv1_2_client_method() function is used to indicate that the application is a client and will only support the TLS 1.2 protocol.  This function allocates memory for and initializes a new WOLFSSL_METHOD structure to be used when creating the SSL/TLS context with wolfSSL_CTX_new().</p>
+<p>
+    The wolfTLSv1_2_client_method() function is used to indicate that the application is a client and will only support the TLS 1.2 protocol.  This function allocates memory for and initializes a new WOLFSSL_METHOD structure to be used when creating the SSL/TLS context with wolfSSL_CTX_new().
+</p>
 </blockquote>
-<p><code>WOLFSSL_METHOD* wolfTLSv1_2_server_method()</code></p>
+<p>
+    <code>WOLFSSL_METHOD* wolfTLSv1_2_server_method()</code>
+</p>
 <blockquote>
-<p>The wolfTLSv1_2_server_method() function is used to indicate that the application is a server and will only support the TLS 1.2 protocol.  This function allocates memory for and initializes a new WOLFSSL_METHOD structure to be used when creating the SSL/TLS context with wolfSSL_CTX_new().</p>
+<p>
+    The wolfTLSv1_2_server_method() function is used to indicate that the application is a server and will only support the TLS 1.2 protocol.  This function allocates memory for and initializes a new WOLFSSL_METHOD structure to be used when creating the SSL/TLS context with wolfSSL_CTX_new().
+</p>
 </blockquote>
-<p><code>int  wolfSSL_connect(WOLFSSL* ssl)</code></p>
+<p>
+    <code>int  wolfSSL_connect(WOLFSSL* ssl)</code>
+</p>
 <blockquote>
-<p>This function is called on the client side and initiates an SSL/TLS handshake with a server.  When this function is called, the underlying communication channel has already been set up.</p>
+<p>
+    This function is called on the client side and initiates an SSL/TLS handshake with a server.  When this function is called, the underlying communication channel has already been set up.
+</p>
 </blockquote>
-<p><code>void wolfSSL_write(WOLFSSL* ssl, const void* data, int sz)</code></p>
+<p>
+    <code>void wolfSSL_write(WOLFSSL* ssl, const void* data, int sz)</code>
+</p>
 <blockquote>
-<p>This function writes sz bytes from the buffer, data, to the SSL connection, ssl. If necessary, wolfSSL_write() will negotiate an SSL/TLS session if the handshake has not already been performed yet by wolfSSL_connect() or wolfSSL_accept().</p>
+<p>
+    This function writes sz bytes from the buffer, data, to the SSL connection, ssl. If necessary, wolfSSL_write() will negotiate an SSL/TLS session if the handshake has not already been performed yet by wolfSSL_connect() or wolfSSL_accept().
+</p>
 </blockquote>
-<p><code>void wolfSSL_read(WOLFSSL* ssl, void* data, int sz)</code> </p>
+<p>
+    <code>void wolfSSL_read(WOLFSSL* ssl, void* data, int sz)</code>
+</p>
 <blockquote>
-<p>This function reads sz bytes from the SSL session (ssl) internal read buffer into the buffer data.  The bytes read are removed from the internal receive buffer.</p>
+<p>
+    This function reads sz bytes from the SSL session (ssl) internal read buffer into the buffer data.  The bytes read are removed from the internal receive buffer.
+</p>
 </blockquote>
-<p><code>void wolfSSL_free(WOLFSSL* ssl)</code></p>
+<p>
+    <code>void wolfSSL_free(WOLFSSL* ssl)</code>
+</p>
 <blockquote>
-<p>This function frees an allocated WOLFSSL object.</p>
+<p>
+    This function frees an allocated WOLFSSL object.
+</p>
 </blockquote>
-<p><code>void wolfSSL_CTX_free(WOLFSSL_CTX* ctx)</code></p>
+<p>
+    <code>void wolfSSL_CTX_free(WOLFSSL_CTX* ctx)</code>
+</p>
 <blockquote>
-<p>This function frees an allocated WOLFSSL_CTX object.  This function decrements the CTX reference count and only frees the context when the reference count has reached 0.</p>
+<p>
+    This function frees an allocated WOLFSSL_CTX object.  This function decrements the CTX reference count and only frees the context when the reference count has reached 0.
+</p>
 </blockquote>
-<p><code>void wolfSSL_Cleanup(void)</code></p>
+<p>
+    <code>void wolfSSL_Cleanup(void)</code>
+</p>
 <blockquote>
-<p>Un-initializes the wolfSSL library from further use.  Doesn't have to be called, though it will free any resources used by the library.</p>
+<p>
+    Un-initializes the wolfSSL library from further use.  Doesn't have to be called, though it will free any resources used by the library.
+</p>
 </blockquote>
-<p><code>int wolfSSL_CTX_use_certificate_file(WOLFSSL_CTX* ctx, const char* file, int format)</code></p>
+<p>
+    <code>int wolfSSL_CTX_use_certificate_file(WOLFSSL_CTX* ctx, const char* file, int format)</code>
+</p>
 <blockquote>
-<p>This function loads a certificate file into the SSL context (WOLFSSL_CTX).  The file is provided by the file argument.  The format argument specifies the format type of the file - either SSL_FILETYPE_ASN1 or SSL_FILETYPE_PEM.  Please see the examples for proper usage.</p>
+<p>
+    This function loads a certificate file into the SSL context (WOLFSSL_CTX).  The file is provided by the file argument.  The format argument specifies the format type of the file - either SSL_FILETYPE_ASN1 or SSL_FILETYPE_PEM.  Please see the examples for proper usage.
+</p>
 </blockquote>
-<p><code>int wolfSSL_CTX_use_PrivateKey_file(WOLFSSL_CTX* ctx, const char* file, int format)</code></p>
+<p>
+    <code>int wolfSSL_CTX_use_PrivateKey_file(WOLFSSL_CTX* ctx, const char* file, int format)</code>
+</p>
 <blockquote>
-<p>This function loads a private key file into the SSL context (WOLFSSL_CTX).  The file is provided by the file argument.  The format argument specifies the format type of the file - SSL_FILETYPE_ASN1or SSL_FILETYPE_PEM.  Please see the examples for proper usage. <br />
+<p>
+    This function loads a private key file into the SSL context (WOLFSSL_CTX).  The file is provided by the file argument.  The format argument specifies the format type of the file - SSL_FILETYPE_ASN1or SSL_FILETYPE_PEM.  Please see the examples for proper usage. <br/>
 </p>
 </blockquote>
 <!--FAQ-->
 <a name="FAQ">
 <h2 id="FAQ">FAQ</a></h2>
-<h3 id="visStud"> Using the echoclient & echoserver with Visual Studio</h3>
-<p><li>Check out the tutorial in the <a href="#links">Helpful Links</a>.</li></p>
+<ul>
+
+<li>
+    <h3 id="visStud"> Using the echoclient & echoserver with Visual Studio</h3>
+    <p> 
+        <ul>
+            <li>
+                The echoserver and echoclient are examples found in the examples directory of the wolfSSL source. Check out the tutorial in the <a href="#links">Helpful Links</a>.
+            </li>
+        </ul>
+    </p>
+</li>
 
 
-<h3 id="conf">Important configure options</h3>
+<li><h3 id="conf">Important configure options</h3>
 <p>
-<li>--enable-opensslextra enables openSSL compatability, providing wolfSSL functions with openSSL names.</li>
-<li>--enable-pwdbased enables password based encryption. This is often paired with the opensslextra, and is required for the wolfSSL command-line utility.</li>
+    <ul>
+        <li>--enable-opensslextra enables openSSL compatability, providing wolfSSL functions with openSSL names.</li>
+        <li>--enable-pwdbased enables password based encryption. This is often paired with the opensslextra.</li>
+        <li>--enable-dtls, this enables DTLS which is useful for a UDP connection, or just trying to run the wolfSSL examples.</li>
+    </ul>
+</p></li>
+
+<li>
+    <h3 id="cross">Cross compiling</h3>
+        <p>
+            <ul>
+            <li>
+                When cross compiling, you'll need to specify the host to <code>./configure</code>, such as:
+                <code>./configure --host=arm-linux</code>
+            </li>
+            <li>
+                You may also need to specify the compiler, linker, etc. that you want to use:
+                <code>./configure --host=arm-linux CC=arm-linux-gcc AR=arm-linux-ar RANLIB=arm-linux</code>
+            </li>
+        </ul>
+    </p>
+</li>
+
+
+</ul>
 
 
 </p>
@@ -252,10 +342,10 @@ int main() {
 <h2 id="helpful-links-wzxhzdk8wzxhzdk9">Helpful Links</a></h2>
 <p>In general, these are links which will be useful for using both wolfSSL, as well as just networked and secure applications in general. Furthermore, there is a more comprehensive tutorial that can be found in chapter 11 of the official wolfSSL manual, these examples also do appropriate error checking, which is worth taking a look at. For a more comprehensive API, check out chapter 17 of the official manual.</p>
 <ul>
-<li><a href="http://www.wolfssl.com/documentation/CyaSSL-Manual.pdf">wolfSSL official manual</a></li>
-<li><a href="http://www.wikipedia.org/wiki/WolfSSL">wolfSSL Wikipedia page</a></li>
-<li><a href="http://www.wikipedia.org/wiki/Comparison_of_TLS_implementations">Comparison of TLS libraries</a></li>
-<li><a href="http://www.wikipedia.org/wiki/Transport_Layer_Security">TLS Wikipedia page</a></li>
-<li><a href="http://www.wikipedia.org/wiki/OSI_model">OSI model Wikipedia page</a></li>
-<li><a href="./vs_tut.pdf">Visual Studio tutorial</a></li>
+    <li><a href="http://www.wolfssl.com/documentation/CyaSSL-Manual.pdf">wolfSSL official manual</a></li>
+    <li><a href="http://www.wikipedia.org/wiki/WolfSSL">wolfSSL Wikipedia page</a></li>
+    <li><a href="http://www.wikipedia.org/wiki/Comparison_of_TLS_implementations">Comparison of TLS libraries</a></li>
+    <li><a href="http://www.wikipedia.org/wiki/Transport_Layer_Security">TLS Wikipedia page</a></li>
+    <li><a href="http://www.wikipedia.org/wiki/OSI_model">OSI model Wikipedia page</a></li>
+    <li><a href="./vs_tut.pdf">Visual Studio tutorial</a></li>
 </ul>
