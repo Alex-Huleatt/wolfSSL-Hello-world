@@ -80,6 +80,8 @@ int main() {
     WOLFSSL* ssl;
     WOLFSSL_METHOD* method;
     struct  sockaddr_in servAddr;           /* struct for server address */
+    const char message[] = "Hello, World!";
+
     
     sockfd = socket(AF_INET, SOCK_STREAM, 0); /* create socket file description */
     memset(&servAddr, 0, sizeof(servAddr)); /* clears memory block for use */  
@@ -96,9 +98,6 @@ int main() {
 
     wolfSSL_set_fd(ssl, sockfd); /* Connect wolfssl to the socket */
     wolfSSL_connect(ssl); /* connect to server */
-
-    const char message[] = "Hello, World!";
-
     wolfSSL_write(ssl, message, strlen(message)); /* send message to server */
 
     /* frees all data before client termination */
@@ -163,7 +162,7 @@ int main() {
     return 0;
 }
 </code></pre>
-<p>The server waits on the port until it hears a request, and then prints a single message before exiting. To compile this file, it is important to link the wolfSSL library with the <code>-lwolfssl</code> option, this is automatically handled by the makefile which can be obtained with this code <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-">on GitHub</a>. Please be aware, that in a real implementation, there are numerous potential errors that need to be handled. Most of these functions return error codes or nulls if something goes wrong. This code will fail if anything unsavory happens. </p>
+<p>The server waits on the port until it hears a request, and then prints a single message before exiting. To compile this file, it is important to link the wolfSSL library with the <code>-lwolfssl</code> option, this is automatically handled by the makefile which can be obtained with this code <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-">on GitHub</a>. Please be aware that in a real implementation, there are numerous potential errors that need to be handled. Most of these functions return error codes or nulls if something goes wrong. This code will fail if anything unsavory happens. </p>
 <p><strong>Note</strong>: If you run into any errors or unexpected behavior, check out the full tutorial found in chapter 11 of the official manual. Simplicity and readability were valued over reliability and good practice for this example.</p>
 
 
@@ -294,18 +293,19 @@ int main() {
     <p> 
         <ul>
             <li>
-                The echoserver and echoclient are examples found in the examples directory of the wolfSSL source. Check out the tutorial in the <a href="#links">Helpful Links</a>.
+                The echoserver and echoclient are examples found in the examples directory of the wolfSSL source. Check out the tutorial in the links below.
             </li>
         </ul>
     </p>
 </li>
 
-<li><h3 id="conf">Important configure options</h3>
+<li><h3 id="conf">Configure options</h3>
 <p>
     <ul>
-        <li>--enable-opensslextra enables openSSL compatability, providing wolfSSL functions with openSSL names.</li>
+        <li>--enable-opensslextra enables OpenSSL compatability, providing wolfSSL functions with OpenSSL names.</li>
         <li>--enable-pwdbased enables password based encryption. This is often paired with the opensslextra.</li>
         <li>--enable-dtls, this enables DTLS which is useful for a UDP connection, or just trying to run the wolfSSL examples.</li>
+        <li>More information on configure options can be found in chapter 2.5 of the manual.</li>
     </ul>
 </p></li>
 
@@ -313,14 +313,9 @@ int main() {
     <h3 id="cross">Cross compiling</h3>
         <p>
             <ul>
-            <li>
-                When cross compiling, you'll need to specify the host to <code>./configure</code>, such as:
-                <code>./configure --host=arm-linux</code>
-            </li>
-            <li>
-                You may also need to specify the compiler, linker, etc. that you want to use:
-                <code>./configure --host=arm-linux CC=arm-linux-gcc AR=arm-linux-ar RANLIB=arm-linux</code>
-            </li>
+            <li>When cross compiling, you'll need to specify the host to <code>./configure</code>, such as:<code>./configure --host=arm-linux</code></li>
+            <li>You may also need to specify the compiler, linker, etc. that you want to use:<code>./configure --host=arm-linux CC=arm-linux-gcc AR=arm-linux-ar RANLIB=arm-linux</code></li>
+            <li>More information on cross compiling can be found in chapter 2.6 of the manual.</li>
         </ul>
     </p>
 </li>
