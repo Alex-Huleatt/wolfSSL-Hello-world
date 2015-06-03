@@ -14,7 +14,10 @@ int main()
     WOLFSSL* ssl;
     WOLFSSL_METHOD* method;
     struct  sockaddr_in servAddr;           /* struct for server address */
-    
+    const char message[] = "Hello, World!";
+
+
+
     sockfd = socket(AF_INET, SOCK_STREAM, 0); /* create socket file description */
     memset(&servAddr, 0, sizeof(servAddr)); /* clears memory block for use */  
     servAddr.sin_family = AF_INET;          /* sets address family to internet*/
@@ -30,9 +33,6 @@ int main()
 
     wolfSSL_set_fd(ssl, sockfd); /* Connect wolfssl to the socket */
     wolfSSL_connect(ssl); /* connect to server */
-
-    const char message[] = "Hello, World!";
-
     wolfSSL_write(ssl, message, strlen(message)); /* send message to server */
 
     /* frees all data before client termination */
