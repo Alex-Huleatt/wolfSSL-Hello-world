@@ -144,8 +144,8 @@ h1,h2,h3{
 
                 /* Wait for a client */
                 socklen_t connd = accept(sockfd, 
-                (struct sockaddr *)&clientAddr,
-                &size); 
+                                        (struct sockaddr *)&clientAddr,
+                                        &size); 
                 ssl = wolfSSL_new(ctx);
 
                 wolfSSL_set_fd(ssl, connd); /* direct our ssl to our clients connection */
