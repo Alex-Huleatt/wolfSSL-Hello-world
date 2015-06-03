@@ -87,7 +87,8 @@ h1,h2,h3{
             <h2 id="hello-world-serverclient-example">Hello, World! Server/Client Example</h2>
             <p>Now that wolfSSL has been compiled and installed we can include it and use any of its functions. Here we demonstrate a simple client/server interaction using wolfSSL to secure a message. </p>
             <h3 id="clientc">client.c</h3>
-            <pre><code class="prettyprint">#include &ltwolfssl/ssl.h&gt
+            <pre><code class="prettyprint">
+                #include &ltwolfssl/ssl.h&gt
                 #include &ltsys/socket.h&gt
                 #include &ltnetinet/in.h&gt
                 #include &ltstring.h&gt
@@ -129,7 +130,8 @@ h1,h2,h3{
             <p>This client attempts to access a server on port 11111, with localhost being the default. Then it attempts to send a single message of "Hello, World!", encrypted, to the server. Then it exits. </p>
 
             <h3 id="serverc">server.c</h3>
-            <pre><code class="prettyprint">#include &ltunistd.h&gt
+            <pre><code class="prettyprint">
+                #include &ltunistd.h&gt
                 #include &ltsys/socket.h&gt
                 #include &ltnetinet/in.h&gt
                 #include &ltwolfssl/ssl.h&gt
@@ -142,7 +144,10 @@ h1,h2,h3{
                 char buff[256];
                 socklen_t size = sizeof(clientAddr);
 
-                socklen_t connd = accept(sockfd, (struct sockaddr *)&clientAddr, &size); /* Wait until a client connects */
+                /* Wait for a client */
+                socklen_t connd = accept(sockfd, 
+                                        (struct sockaddr *)&clientAddr,
+                                        &size); 
                 ssl = wolfSSL_new(ctx);
 
                 wolfSSL_set_fd(ssl, connd); /* direct our ssl to our clients connection */
