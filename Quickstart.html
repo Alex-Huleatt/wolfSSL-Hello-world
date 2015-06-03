@@ -1,3 +1,21 @@
+<style type="text/css">
+    body{
+        margin:40px auto;
+        max-width:650px;
+        line-height:1.6;
+        font-size:18px;
+        color:#444;padding:0
+        10px
+    }
+    code {
+        font-size:14px;
+    }
+h1,h2,h3{
+    line-height:1.2
+    }</style>
+
+
+
 <link rel="shortcut icon" type="image/png" href="site/favicon.png"/>
 <link href="site/prettify.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="site/prettify.js"></script>
@@ -53,11 +71,13 @@
 </p>
 <h3 id="setup">Setup</h3>
 <p>After you have downloaded the source code run the following commands from the wolfssl/ directory:
-<pre>
+
+<pre><code>
 ./configure   
 make 
 sudo make install
-</pre>
+</code></pre>
+
 <code>./configure</code>  uses autoconf to configure wolfSSL to default settings; a full list of possible options can be found in the manual.  <code>make</code> will compile the wolfSSL library. <code>sudo make install</code> will allow one to use wolfSSL from anywhere by including the package with <code>#include &ltwolfssl/ssl.h&gt </code>.
 <p>That's it!</p>
 
@@ -81,7 +101,6 @@ int main() {
     WOLFSSL_METHOD* method;
     struct  sockaddr_in servAddr;           /* struct for server address */
     const char message[] = "Hello, World!";
-
     
     sockfd = socket(AF_INET, SOCK_STREAM, 0); /* create socket file description */
     memset(&servAddr, 0, sizeof(servAddr)); /* clears memory block for use */  
