@@ -22,8 +22,6 @@ h1,h2,h3{
 <link href="site/prettify.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="site/prettify.js"></script>
 <body onload="prettyPrint()" class="page-body">
-
-    <!--<body bgcolor="#eaeeef">-->
     <center><h1 id="wolfssl-quickstart-guide">wolfSSL QuickStart Guide</h1></center>
     <center><img src="http://wolfssl.com/wolfSSL/Home_files/wolfssl_logo.png"></center>
 
@@ -64,11 +62,11 @@ h1,h2,h3{
 
     <a name="install"></a>
     <h2 id="installation-and-setup-wzxhzdk4wzxhzdk5">Installation and Setup </h2>
-    <p>The wolfSSL library requires the use of autoconf and a C compiler in order to operate. wolfSSL supports a majority of operating systems, a full list of which can be seen on the <a href="http://www.wikipedia.org/wiki/WolfSSL">wolfSSL wikipedia article.</a></p>
+    <p>The wolfSSL library requires the use of autoconf and a C compiler in order to operate. wolfSSL supports a majority of operating systems, a full list of which can be seen on the <a href="http://www.wikipedia.org/wiki/WolfSSL" target="_blank">wolfSSL wikipedia article.</a></p>
     <h3 id="getting-the-code">Getting the Code</h3>
     <p>Download the source from one of the following locations:
-        <a href="http://www.wolfssl.com/yaSSL/download/downloadForm.php">wolfSSL webpage</a> or
-        <a href="http://www.github.com/wolfSSL/wolfssl">GitHub</a>.</p>
+        <a href="http://www.wolfssl.com/yaSSL/download/downloadForm.php" target="_blank">wolfSSL webpage</a> or
+        <a href="http://www.github.com/wolfSSL/wolfssl" target="_blank">GitHub</a>.</p>
         <p><strong>Note</strong>: it is necessary to run <code>bash autogen.sh</code> if the source is downloaded from the GitHub repo.<br />
         </p>
         <h3 id="setup">Setup</h3>
@@ -80,7 +78,7 @@ h1,h2,h3{
                 sudo make install
             </code></pre>
 
-            <code>./configure</code>  uses autoconf to configure wolfSSL to default settings; a full list of possible options can be found in the manual.  <code>make</code> will compile the wolfSSL library. <code>sudo make install</code> will allow one to use wolfSSL from anywhere by including the package with <code>#include &ltwolfssl/ssl.h&gt </code>.
+            <code>./configure</code> uses autoconf to configure wolfSSL to default settings; a full list of possible options can be found in the manual.  <code>make</code> will compile the wolfSSL library. <code>sudo make install</code> will allow one to use wolfSSL from anywhere by including the package with <code>#include &ltwolfssl/ssl.h&gt </code>.
             <p>That's it!</p>
 
             <a name="examp"></a>
@@ -146,8 +144,8 @@ h1,h2,h3{
 
                 /* Wait for a client */
                 socklen_t connd = accept(sockfd, 
-                                        (struct sockaddr *)&clientAddr,
-                                        &size); 
+                (struct sockaddr *)&clientAddr,
+                &size); 
                 ssl = wolfSSL_new(ctx);
 
                 wolfSSL_set_fd(ssl, connd); /* direct our ssl to our clients connection */
@@ -188,7 +186,7 @@ h1,h2,h3{
             return 0;
         }
     </code></pre>
-    <p>The server waits on the port until it hears a request, and then prints a single message before exiting. To compile this file, it is important to link the wolfSSL library with the <code>-lwolfssl</code> option, this is automatically handled by the makefile which can be obtained with this code <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-">on GitHub</a>. Please be aware that in a real implementation, there are numerous potential errors that need to be handled. Most of these functions return error codes or nulls if something goes wrong. This code will fail if anything unsavory happens. </p>
+    <p>The server waits on the port until it hears a request, and then prints a single message before exiting. To compile this file, it is important to link the wolfSSL library with the <code>-lwolfssl</code> option, this is automatically handled by the makefile which can be obtained with this code <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-" target="_blank">on GitHub</a>. Please be aware that in a real implementation, there are numerous potential errors that need to be handled. Most of these functions return error codes or nulls if something goes wrong. This code will fail if anything unsavory happens. </p>
     <p><strong>Note</strong>: If you run into any errors or unexpected behavior, check out the full tutorial found in chapter 11 of the official manual. Simplicity and readability were valued over reliability and good practice for this example.</p>
 
 
