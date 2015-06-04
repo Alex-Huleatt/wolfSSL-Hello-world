@@ -12,16 +12,20 @@ int main()
     WOLFSSL_CTX* ctx;
     WOLFSSL* ssl;
     WOLFSSL_METHOD* method;
-    struct  sockaddr_in servAddr;           /* struct for server address */
+    struct  sockaddr_in servAddr;
     const char message[] = "Hello, World!";
 
-    sockfd = socket(AF_INET, SOCK_STREAM, 0); /* create socket file description */
-    memset(&servAddr, 0, sizeof(servAddr)); /* clears memory block for use */  
-    servAddr.sin_family = AF_INET;          /* sets address family to internet*/
-    servAddr.sin_port = htons(SERV_PORT);   /* sets port to defined port */
-    connect(sockfd, (struct sockaddr *) &servAddr, sizeof(servAddr)); /* connect to socket */
+    /* create and set up socket */
+    sockfd = socket(AF_INET, SOCK_STREAM, 0); 
+    memset(&servAddr, 0, sizeof(servAddr)); 
+    servAddr.sin_family = AF_INET;   
+    servAddr.sin_port = htons(SERV_PORT); 
 
-    wolfSSL_Init(); /* initialize wolfssl library */
+    /* connect to socket */
+    connect(sockfd, (struct sockaddr *) &servAddr, sizeof(servAddr)); 
+
+    /* initialize wolfssl library */
+    wolfSSL_Init(); 
 
     method = wolfTLSv1_2_client_method(); /* use TLS v1.2 */
 
@@ -30,6 +34,7 @@ int main()
         err_sys("wolfSSL_CTX_new error");
     }
 
+    /* make new wolfSSL struct */
     if ( (ssl = wolfSSL_new(ctx)) == NULL) {
         err_sys("wolfSSL_new error");
     }
@@ -40,9 +45,10 @@ int main()
         err_sys("Error loading certs/ca-cert.pem");
     }
 
-    wolfSSL_set_fd(ssl, sockfd); /* Connect wolfssl to the socket */
-    wolfSSL_connect(ssl); /* connect to server */
-    wolfSSL_write(ssl, message, strlen(message)); /* send message to server */
+    /* Connect wolfssl to the socket, server, then send message */
+    wolfSSL_set_fd(ssl, sockfd); 
+    wolfSSL_connect(ssl); 
+    wolfSSL_write(ssl, message, strlen(message));
 
     /* frees all data before client termination */
     wolfSSL_free(ssl);

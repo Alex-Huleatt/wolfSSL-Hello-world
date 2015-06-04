@@ -15,6 +15,7 @@ int main(int argc, char** argv)
     char buf[MAX_LINE];
     WOLFSSL_METHOD* method;
 
+    /* Initialize wolfSSL library */
     wolfSSL_Init();
 
     /* Get encryption method */
@@ -36,7 +37,7 @@ int main(int argc, char** argv)
 
     tcp_accept(&listenfd, &connfd, NULL, SERV_PORT, 0, 0, 0);
 
-    /* Create CYASSL object */
+    /* Create wolfSSL object */
     if ( (ssl = wolfSSL_new(ctx)) == NULL) 
         err_sys("wolfSSL_new error");
 
