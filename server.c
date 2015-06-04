@@ -1,53 +1,62 @@
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <wolfssl/options.h>
 #include <wolfssl/ssl.h>
+#include <wolfssl/test.h>
+#include <errno.h>
 
-#define DEFAULT_PORT 11111
+#define SERV_PORT 11111
+#define MAX_LINE 4096
 
-void AcceptAndRead(WOLFSSL_CTX* ctx, socklen_t sockfd, struct sockaddr_in clientAddr)
+int main(int argc, char** argv) 
 {
-    WOLFSSL* ssl;
-    char buff[256];
-    socklen_t size = sizeof(clientAddr);
-    
-    socklen_t connd = accept(sockfd, (struct sockaddr *)&clientAddr, &size); /* Wait until a client connects */
-    ssl = wolfSSL_new(ctx);
-    
-    wolfSSL_set_fd(ssl, connd); /* direct our ssl to our clients connection */
-    wolfSSL_read(ssl, buff, sizeof(buff)-1); /* Read the client data into our buff array */
-    printf("%s\n", buff); /* Print any data the client sends to the console */
-    wolfSSL_free(ssl);    /* Free the WOLFSSL object */
-    close(connd);         /* close the connected socket */
-}
-
-int main() {
+    int listenfd, connfd;
     WOLFSSL_CTX* ctx;
-    socklen_t sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    WOLFSSL* ssl;
+    int n;
+    char buf[MAX_LINE];
     WOLFSSL_METHOD* method;
-    struct sockaddr_in serverAddr, clientAddr;
 
     wolfSSL_Init();
 
-    method = wolfTLSv1_2_server_method(); /* set wolfssl to use TLS v 1.2 */
+    /* Get encryption method */
+    method = wolfTLSv1_2_server_method();
 
-    ctx = wolfSSL_CTX_new(method); /* create and initialize WOLFSSL_CTX structure */
+    /* Create wolfSSL_CTX */
+    if ( (ctx = wolfSSL_CTX_new(method)) == NULL) 
+        err_sys("wolfSSL_CTX_new error");
 
-    /* Load server cert and private key */
-    wolfSSL_CTX_use_certificate_file(ctx, "certs/server-cert.pem", SSL_FILETYPE_PEM);
-    wolfSSL_CTX_use_PrivateKey_file(ctx, "certs/server-key.pem", SSL_FILETYPE_PEM);
+    /* Load server certs into ctx */
+    if (wolfSSL_CTX_use_certificate_file(ctx, "certs/server-cert.pem",
+                SSL_FILETYPE_PEM) != SSL_SUCCESS) 
+        err_sys("Error loading certs/server-cert.pem");
 
-    /* Fill the server's address family */
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_addr.s_addr = INADDR_ANY;
-    serverAddr.sin_port = htons(DEFAULT_PORT);
+    /* Load server key into ctx */
+    if (wolfSSL_CTX_use_PrivateKey_file(ctx, "certs/server-key.pem",
+                SSL_FILETYPE_PEM) != SSL_SUCCESS)
+        err_sys("Error loading certs/server-key.pem");
 
-    /* Attach the server socket to our port */
-    bind(sockfd, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
+    tcp_accept(&listenfd, &connfd, NULL, SERV_PORT, 0, 0, 0);
 
-    if (listen(sockfd,1)==0) AcceptAndRead(ctx, sockfd, clientAddr);
+    /* Create CYASSL object */
+    if ( (ssl = wolfSSL_new(ctx)) == NULL) 
+        err_sys("wolfSSL_new error");
 
-    wolfSSL_CTX_free(ctx);   /* Free WOLFSSL_CTX */
-    wolfSSL_Cleanup();       /* Free wolfSSL */
-    return 0;
+    wolfSSL_set_fd(ssl, connfd);
+
+    if ( (n = wolfSSL_read(ssl, buf, (sizeof(buf) -1))) > 0) {
+        printf("%s\n", buf);
+        if (wolfSSL_write(ssl, buf, n) != n)
+            err_sys("wolfSSL_write error");
+    }
+    if (n <0)
+        printf("wolfSSL_read error = %d\n", wolfSSL_get_error(ssl, n));
+    else if (n == 0)
+        printf("Connection close by peer\n");
+
+    wolfSSL_free(ssl);
+    close(connfd);
+
+    wolfSSL_CTX_free(ctx);
+    wolfSSL_Cleanup();
+    exit(EXIT_SUCCESS);
 }
+

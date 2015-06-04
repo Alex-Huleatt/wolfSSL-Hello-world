@@ -38,7 +38,7 @@ h1,h2,h3{
 
     <a name="intro"></a>
     <h2 id="introduction-to-wolfssl-wzxhzdk0wzxhzdk1">Introduction to wolfSSL </h2>
-    <p>The wolfSSL embedded SSL library (formerly CyaSSL) is a lightweight SSL/TLS library written in ANSI C and targeted for embedded, RTOS, and resource-constrained environments - primarily because of its small size, speed, and feature set.  It is commonly used in standard operating environments as well because of its royalty-free pricing and excellent cross platform support.  wolfSSL supports industry standards up to the current TLS 1.2 and DTLS 1.2 levels, is up to 20 times smaller than OpenSSL, and offers progressive ciphers such as HC-128, RABBIT, NTRU, and SHA-3.  User benchmarking and feedback reports dramatically better performance when using wolfSSL over OpenSSL. </p>
+    <p>The wolfSSL embedded SSL library (formerly CyaSSL) is a lightweight SSL/TLS library written in ANSI C and targeted for embedded, RTOS, and resource-constrained environments - primarily because of its small size, speed, and feature set.  It is commonly used in standard operating environments as well because of its royalty-free pricing and excellent cross platform support.  wolfSSL supports industry standards up to the current TLS 1.2 and DTLS 1.2 levels, is up to 20 times smaller than OpenSSL, and offers progressive ciphers such as ChaCha20, Curve25519, NTRU, and Blake2b. User benchmarking and feedback reports dramatically better performance when using wolfSSL over OpenSSL. </p>
     <p>The wolfSSL library is designed to facilitate secure communication, as well as offering a suite of cryptographic algorithms and a command line tool. In this quickstart guide, we will cover basic installation and setup, as well as simple use cases. For a more comprehensive tour, see the manual linked to in the <a href="#links">Helpful Links </a> section towards the bottom. A number of other useful links are also available for those new to the wonderful world of secure communication. </p>
 
 
@@ -86,16 +86,14 @@ h1,h2,h3{
             <p>Now that wolfSSL has been compiled and installed we can include it and use any of its functions. Here we demonstrate a simple client/server interaction using wolfSSL to secure a message. </p>
             <h3 id="clientc">client.c</h3>
             <pre><code class="prettyprint">
+                #include &ltwolfssl/options.h&gt
                 #include &ltwolfssl/ssl.h&gt
-                #include &ltsys/socket.h&gt
-                #include &ltnetinet/in.h&gt
-                #include &ltstring.h&gt
+                #include &ltwolfssl/test.h&gt
+                #include &lterrno.h&gt
 
                 #define SERV_PORT 11111
 
-                const char* cert = "certs/ca-cert.pem";
-
-                int main() 
+                int main()
                 {
                     int sockfd; 
                     WOLFSSL_CTX* ctx;
@@ -111,11 +109,23 @@ h1,h2,h3{
                     connect(sockfd, (struct sockaddr *) &servAddr, sizeof(servAddr)); /* connect to socket */
 
                     wolfSSL_Init(); /* initialize wolfssl library */
-                    method = wolfTLSv1_2_client_method(); /* use TLS v1.2 */
-                    ctx = wolfSSL_CTX_new(method); /* make new ssl context */
-                    ssl = wolfSSL_new(ctx);
 
-                    wolfSSL_CTX_load_verify_locations(ctx, cert, 0); /* Add cert to ctx */
+                    method = wolfTLSv1_2_client_method(); /* use TLS v1.2 */
+
+                    /* make new ssl context */
+                    if ( (ctx = wolfSSL_CTX_new(method)) == NULL) {
+                        err_sys("wolfSSL_CTX_new error");
+                    }
+
+                    if ( (ssl = wolfSSL_new(ctx)) == NULL) {
+                        err_sys("wolfSSL_new error");
+                    }
+
+                    /* Add cert to ctx */
+                    if (wolfSSL_CTX_load_verify_locations(ctx, "certs/ca-cert.pem", 0) != 
+                                SSL_SUCCESS) {
+                        err_sys("Error loading certs/ca-cert.pem");
+                    }
 
                     wolfSSL_set_fd(ssl, sockfd); /* Connect wolfssl to the socket */
                     wolfSSL_connect(ssl); /* connect to server */
@@ -125,74 +135,78 @@ h1,h2,h3{
                     wolfSSL_free(ssl);
                     wolfSSL_CTX_free(ctx);
                     wolfSSL_Cleanup();
-                } 
+                }
             </code></pre>
             <p>This client attempts to access a server on port 11111, with localhost being the default. Then it attempts to send a single message of "Hello, World!", encrypted, to the server. Then it exits. </p>
 
             <h3 id="serverc">server.c</h3>
             <pre><code class="prettyprint">
-                #include &ltunistd.h&gt
-                #include &ltsys/socket.h&gt
-                #include &ltnetinet/in.h&gt
+                #include &ltwolfssl/options.h&gt
                 #include &ltwolfssl/ssl.h&gt
+                #include &ltwolfssl/test.h&gt
+                #include &lterrno.h&gt
 
-                #define DEFAULT_PORT 11111
+                #define SERV_PORT 11111
+                #define MAX_LINE 4096
 
-                void AcceptAndRead(WOLFSSL_CTX* ctx, socklen_t sockfd, struct sockaddr_in clientAddr)
+                int main(int argc, char** argv) 
                 {
+                    int listenfd, connfd;
+                    WOLFSSL_CTX* ctx;
                     WOLFSSL* ssl;
-                    char buff[256];
-                    socklen_t size = sizeof(clientAddr);
+                    int n;
+                    char buf[MAX_LINE];
+                    WOLFSSL_METHOD* method;
 
-                    /* Wait for a client */
-                    socklen_t connd = accept(sockfd, 
-                                            (struct sockaddr *)&clientAddr,
-                                            &size); 
-                    ssl = wolfSSL_new(ctx);
+                    wolfSSL_Init();
 
-                    wolfSSL_set_fd(ssl, connd); /* direct our ssl to our clients connection */
-                    wolfSSL_read(ssl, buff, sizeof(buff)-1); /* Read the client data into our buff array */
-                    printf("%s\n", buff); /* Print any data the client sends to the console */
-                    wolfSSL_free(ssl);    /* Free the WOLFSSL object */
-                    close(connd);         /* close the connected socket */
+                    /* Get encryption method */
+                    method = wolfTLSv1_2_server_method();
+
+                    /* Create wolfSSL_CTX */
+                    if ( (ctx = wolfSSL_CTX_new(method)) == NULL) 
+                        err_sys("wolfSSL_CTX_new error");
+
+                    /* Load server certs into ctx */
+                    if (wolfSSL_CTX_use_certificate_file(ctx, "certs/server-cert.pem",
+                                SSL_FILETYPE_PEM) != SSL_SUCCESS) 
+                        err_sys("Error loading certs/server-cert.pem");
+
+                    /* Load server key into ctx */
+                    if (wolfSSL_CTX_use_PrivateKey_file(ctx, "certs/server-key.pem",
+                                SSL_FILETYPE_PEM) != SSL_SUCCESS)
+                        err_sys("Error loading certs/server-key.pem");
+
+                    tcp_accept(&listenfd, &connfd, NULL, SERV_PORT, 0, 0, 0);
+
+                    /* Create CYASSL object */
+                    if ( (ssl = wolfSSL_new(ctx)) == NULL) 
+                        err_sys("wolfSSL_new error");
+
+                    wolfSSL_set_fd(ssl, connfd);
+
+                    if ( (n = wolfSSL_read(ssl, buf, (sizeof(buf) -1))) > 0) {
+                        printf("%s\n", buf);
+                        if (wolfSSL_write(ssl, buf, n) != n)
+                            err_sys("wolfSSL_write error");
+                    }
+                    if (n <0)
+                        printf("wolfSSL_read error = %d\n", wolfSSL_get_error(ssl, n));
+                    else if (n == 0)
+                        printf("Connection close by peer\n");
+
+                    wolfSSL_free(ssl);
+                    close(connfd);
+
+                    wolfSSL_CTX_free(ctx);
+                    wolfSSL_Cleanup();
+                    exit(EXIT_SUCCESS);
                 }
-
-            int main() {
-                WOLFSSL_CTX* ctx;
-                socklen_t sockfd = socket(AF_INET, SOCK_STREAM, 0);
-                WOLFSSL_METHOD* method;
-                struct sockaddr_in serverAddr, clientAddr;
-
-                wolfSSL_Init();
-
-                method = wolfTLSv1_2_server_method(); /* set wolfssl to use TLS v 1.2 */
-
-                ctx = wolfSSL_CTX_new(method); /* create and initialize WOLFSSL_CTX structure */
-
-                /* Load server cert and private key */
-                wolfSSL_CTX_use_certificate_file(ctx, "certs/server-cert.pem", SSL_FILETYPE_PEM);
-                wolfSSL_CTX_use_PrivateKey_file(ctx, "certs/server-key.pem", SSL_FILETYPE_PEM);
-
-                /* Fill the server's address family */
-                serverAddr.sin_family = AF_INET;
-                serverAddr.sin_addr.s_addr = INADDR_ANY;
-                serverAddr.sin_port = htons(DEFAULT_PORT);
-
-                /* Attach the server socket to our port */
-                bind(sockfd, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
-
-                if (listen(sockfd, 1) == 0) AcceptAndRead(ctx, sockfd, clientAddr);
-
-                wolfSSL_CTX_free(ctx);   /* Free WOLFSSL_CTX */
-                wolfSSL_Cleanup();       /* Free wolfSSL */
-                return 0;
-            }
     </code></pre>
 
-    <p>The server waits on the port until it hears a request, and then prints a single message before exiting. To compile this file, it is important to link the wolfSSL library with the <code>-lwolfssl</code> option, this is automatically handled by the makefile which can be obtained with this code <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-" target="_blank">on GitHub</a>. </p>
-    <p>Please be aware that in a real implementation, there are numerous errors that could potentially occur which need to be handled. Most of these functions return error codes or null if something goes awry. This code will fail if anything unsavory happens. </p>
+    <p>The server waits on the port until it hears a request, and then prints a single message before exiting. To compile this file, it is important to link the wolfSSL library with the <code>&#8209lwolfssl</code> option, this is automatically handled by the makefile which can be obtained with this code <a href="https://github.com/Alex-Huleatt/WolfSSL-Hello-world-" target="_blank">on GitHub</a>. </p>
     
-    <p><strong>Note</strong>: If you run into any errors or unexpected behavior, check out the full tutorial found in chapter 11 of the official manual. Simplicity and readability were valued over reliability and good practice for this example.</p>
+    <p><strong>Note</strong>: If you run into any errors or unexpected behavior, check out the full tutorial found in chapter 11 of the official manual.</p>
 
 
     <a name="api"></a>

@@ -1,11 +1,10 @@
+#include <wolfssl/options.h>
 #include <wolfssl/ssl.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <string.h>
+#include <wolfssl/test.h>
+#include <errno.h>
 
 #define SERV_PORT 11111
 
-const char* cert = "certs/ca-cert.pem";
 
 int main()
 {
@@ -16,8 +15,6 @@ int main()
     struct  sockaddr_in servAddr;           /* struct for server address */
     const char message[] = "Hello, World!";
 
-
-
     sockfd = socket(AF_INET, SOCK_STREAM, 0); /* create socket file description */
     memset(&servAddr, 0, sizeof(servAddr)); /* clears memory block for use */  
     servAddr.sin_family = AF_INET;          /* sets address family to internet*/
@@ -25,11 +22,23 @@ int main()
     connect(sockfd, (struct sockaddr *) &servAddr, sizeof(servAddr)); /* connect to socket */
 
     wolfSSL_Init(); /* initialize wolfssl library */
-    method = wolfTLSv1_2_client_method(); /* use TLS v1.2 */
-    ctx = wolfSSL_CTX_new(method); /* make new ssl context */
-    ssl = wolfSSL_new(ctx);
 
-    wolfSSL_CTX_load_verify_locations(ctx, cert, 0); /* Add cert to ctx */
+    method = wolfTLSv1_2_client_method(); /* use TLS v1.2 */
+
+    /* make new ssl context */
+    if ( (ctx = wolfSSL_CTX_new(method)) == NULL) {
+        err_sys("wolfSSL_CTX_new error");
+    }
+
+    if ( (ssl = wolfSSL_new(ctx)) == NULL) {
+        err_sys("wolfSSL_new error");
+    }
+
+    /* Add cert to ctx */
+    if (wolfSSL_CTX_load_verify_locations(ctx, "certs/ca-cert.pem", 0) != 
+                SSL_SUCCESS) {
+        err_sys("Error loading certs/ca-cert.pem");
+    }
 
     wolfSSL_set_fd(ssl, sockfd); /* Connect wolfssl to the socket */
     wolfSSL_connect(ssl); /* connect to server */
